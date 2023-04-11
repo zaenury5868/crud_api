@@ -19,5 +19,4 @@ Route::get('/', function () {
 });
 
 Route::resource('categories', CategoryController::class);
-
 // Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
