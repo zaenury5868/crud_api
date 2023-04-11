@@ -2,7 +2,9 @@
 
 @section('content')
     <h1>Kategori</h1>
-
+    @if(session('success'))
+        {{session('success')}}
+    @endif
     <div class="my-3">
         <form action="{{ route('categories.index') }}" method="GET">
             <div class="input-group">
@@ -33,7 +35,7 @@
                         <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline-block">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apa yakin manghapus category ini?')">Delete</button>
                         </form>
                     </td>
                 </tr>
