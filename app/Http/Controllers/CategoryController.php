@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -9,10 +10,21 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $categories = Category::query();
+
+        // Filter pencarian kategori
+        $searchKeyword = $request->query('search');
+        if ($searchKeyword) {
+            $categories->where('name', 'LIKE', '%'.$searchKeyword.'%');
+        }
+
+        // paginate tabel categori
+        $categories = $categories->paginate(10);
+        return view('categories.index', compact('categories'));
     }
+
 
     /**
      * Show the form for creating a new resource.
