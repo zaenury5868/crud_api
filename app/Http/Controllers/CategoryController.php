@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
@@ -20,6 +21,7 @@ class CategoryController extends Controller
         if ($searchKeyword) {
             $categories->where('name', 'LIKE', '%'.$searchKeyword.'%');
         }
+        $user = User::latest()->first();
 
         // paginate tabel categori
         $categories = $categories->orderBy('created_at', 'DESC')->paginate(10);
@@ -40,12 +42,18 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create([
-            'name' => $request->input('name'),
-            'is_publish' => $request->input('is_publish'),
-        ]);
-
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dibuat');
+        try {
+            //code...
+            Category::create([
+                'name' => $request->input('name'),
+                'is_publish' => $request->input('is_publish'),
+            ]);
+    
+            return redirect()->route('categories.index')->with('success', 'Kategori berhasil dibuat');
+        } catch (\Throwable $th) {
+            return redirect()->route('categories.index')->with('error', 'Tambah kategori gagal');
+            //throw $th;
+        }
     }
 
     /**
@@ -69,12 +77,18 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->update([
-            'name' => $request->input('name'),
-            'is_publish' => $request->input('is_publish'),
-        ]);
-
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diupdate');
+        try {
+            //code...
+            $category->update([
+                'name' => $request->input('name'),
+                'is_publish' => $request->input('is_publish'),
+            ]);
+    
+            return redirect()->route('categories.index')->with('success', 'Kategori berhasil diupdate');
+        } catch (\Throwable $th) {
+            return redirect()->route('categories.index')->with('error', 'Update kategori gagal');
+            //throw $th;
+        }
     }
 
     /**
@@ -82,7 +96,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus');
+        try {
+            //code...
+            $category->delete();
+            return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus');
+        } catch (\Throwable $th) {
+            return redirect()->route('categories.index')->with('error', 'Hapus kategori gagal');
+            //throw $th;
+        }
     }
 }
