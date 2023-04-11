@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -21,7 +22,7 @@ class CategoryController extends Controller
         }
 
         // paginate tabel categori
-        $categories = $categories->paginate(10);
+        $categories = $categories->orderBy('created_at', 'DESC')->paginate(10);
         return view('categories.index', compact('categories'));
     }
 
@@ -31,15 +32,20 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        //
+        Category::create([
+            'name' => $request->input('name'),
+            'is_publish' => $request->input('is_publish'),
+        ]);
+
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dibuat');
     }
 
     /**
