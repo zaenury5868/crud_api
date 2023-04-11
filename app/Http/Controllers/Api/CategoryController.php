@@ -36,10 +36,18 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json([
-            'data' => $category,
-            'message' => 'Kategori yang berhasil diambil.'
-        ]);
+        try {
+            //code...
+            return response()->json([
+                'data' => $category,
+                'message' => 'Kategori yang berhasil diambil.'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Kategori tidak ditemukan.'
+            ], 404);
+            //throw $th;
+        }
     }
 
     /**

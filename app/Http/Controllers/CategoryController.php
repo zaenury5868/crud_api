@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
+use App\Jobs\SendCategoryNotification;
 
 class CategoryController extends Controller
 {
@@ -97,7 +98,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         try {
-            //code...
             $category->delete();
             return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus');
         } catch (\Throwable $th) {
