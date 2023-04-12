@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Jobs\SendCategoryNotification;
+use App\Notifications\SendMailNotification;
+use Illuminate\Support\Facades\Notification;
 
 class CategoryController extends Controller
 {
@@ -67,12 +69,12 @@ class CategoryController extends Controller
             'type'      => 'created',
             'action'    => 'menambahkan kategori'
         ];
-
-        dispatch(new SendCategoryNotification($body, $user, 'created'));
+        Notification::send($user, new SendMailNotification($body, 'created'));
+        // dispatch(new SendCategoryNotification($body, $user, 'created'));
 
         return response()->json([
             'data' => $result,
-            'message' => 'Kategori yang berhasil diambil.'
+            'message' => 'Kategori yang berhasil ditambahkan'
         ]);
     }
 
@@ -105,7 +107,9 @@ class CategoryController extends Controller
             'action'    => 'menghapus kategori'
         ];
 
-        dispatch(new SendCategoryNotification($body, $user, 'deleted'));
+        Notification::send($user, new SendMailNotification($body, 'deleted'));
+        // dispatch(new SendCategoryNotification($body, $user, 'deleted'));
+
         $category->delete();
         return response()->json([
             'message' => 'Kategori yang berhasil dihapus.'
