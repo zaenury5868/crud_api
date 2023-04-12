@@ -70,7 +70,6 @@ class CategoryController extends Controller
             'action'    => 'menambahkan kategori'
         ];
         Notification::send($user, new SendMailNotification($body, 'created'));
-        // dispatch(new SendCategoryNotification($body, $user, 'created'));
 
         return response()->json([
             'data' => $result,
